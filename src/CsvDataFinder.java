@@ -35,6 +35,10 @@ public class CsvDataFinder {
         String from;
         String to;
         String reqText;
+
+        FileWriter fwJSON = new FileWriter("output.json");
+        fwJSON.write("{\n");
+
         switch (req) {
             case 0:
                 return;
@@ -45,7 +49,7 @@ public class CsvDataFinder {
                 toFind = sc.next();
                 for (Company elem : data) {
                     if (elem.getShortTitle().toLowerCase().equals(toFind.toLowerCase())) {
-                        System.out.println(elem);
+                        elem.writeToJSON(fwJSON,found);
                         found++;
                     }
                 }
@@ -57,7 +61,7 @@ public class CsvDataFinder {
                 toFind = sc.next();
                 for (Company elem : data) {
                     if (elem.getBranch().toLowerCase().equals(toFind.toLowerCase())) {
-                        System.out.println(elem);
+                        elem.writeToJSON(fwJSON,found);
                         found++;
                     }
                 }
@@ -68,7 +72,7 @@ public class CsvDataFinder {
                 toFind = sc.next();
                 for (Company elem : data) {
                     if (elem.getActivity().toLowerCase().equals(toFind.toLowerCase())) {
-                        System.out.println(elem);
+                        elem.writeToJSON(fwJSON,found);
                         found++;
                     }
                 }
@@ -80,7 +84,7 @@ public class CsvDataFinder {
                 to = sc.next();
                 for (Company elem : data) {
                     if (elem.compareDates(from.toLowerCase(), to.toLowerCase())) {
-                        System.out.println(elem);
+                        elem.writeToJSON(fwJSON,found);
                         found++;
                     }
                 }
@@ -92,7 +96,7 @@ public class CsvDataFinder {
                 to = sc.next();
                 for (Company elem : data) {
                     if (elem.compareEmpl(from.toLowerCase(), to.toLowerCase())) {
-//                        System.out.println(elem);
+                        elem.writeToJSON(fwJSON, found);
                         found++;
                     }
                 }
@@ -105,6 +109,9 @@ public class CsvDataFinder {
         FileWriter fw = new FileWriter("logfile.txt", true);
         fw.write("Request: " + reqText + "\nNumber of found: " + found + "\n\n");
         fw.close();
+        fwJSON.write("}\n");
+        fwJSON.close();
+
     }
 
     public void print() {

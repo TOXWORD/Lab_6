@@ -1,3 +1,6 @@
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class Company {
 
     private final int NUMBER_OF_ELEMENTS = 12;
@@ -86,19 +89,27 @@ public class Company {
             return false;
         }
 
-        if (!(Integer.parseInt(divDate[divDate.length - 1]) >= Integer.parseInt(divFrom[divDate.length - 1]) && Integer.parseInt(divDate[divDate.length - 1]) <= Integer.parseInt(divTo[divDate.length - 1]))) {
-            return false;
+        int yearFrom = Integer.parseInt(divFrom[divFrom.length - 1]);
+        int yearTo = Integer.parseInt(divTo[divTo.length - 1]);
+        int year = Integer.parseInt(divDate[divDate.length - 1]);
+
+        int monthFrom = Integer.parseInt(divFrom[divFrom.length - 2]);
+        int monthTo = Integer.parseInt(divTo[divTo.length - 2]);
+        int month = Integer.parseInt(divDate[divDate.length - 2]);
+
+        int dayFrom = Integer.parseInt(divFrom[divFrom.length - 2]);
+        int dayTo = Integer.parseInt(divTo[divTo.length - 2]);
+        int day = Integer.parseInt(divDate[divDate.length - 2]);
+
+        if ((year >= yearFrom && year <= yearTo) || (year <= yearFrom && year >= yearTo)) {
+            return true;
+        } else if ((month >= monthFrom && month <= monthTo) || (month <= monthFrom && month >= monthTo)) {
+            return true;
+        } else if ((day >= dayFrom && day <= dayTo) || (day <= dayFrom && day >= dayTo)) {
+            return true;
         }
 
-        if (!(Integer.parseInt(divDate[divDate.length - 2]) >= Integer.parseInt(divFrom[divDate.length - 2]) && Integer.parseInt(divDate[divDate.length - 2]) <= Integer.parseInt(divTo[divDate.length - 2]))) {
-            return false;
-        }
-
-        if (!(Integer.parseInt(divDate[divDate.length - 3]) >= Integer.parseInt(divFrom[divDate.length - 3]) && Integer.parseInt(divDate[divDate.length - 3]) <= Integer.parseInt(divTo[divDate.length - 3]))) {
-            return false;
-        }
-
-        return true;
+        return false;
     }
 
     public boolean compareEmpl(String from, String to) {
@@ -116,6 +127,31 @@ public class Company {
             return true;
         }
         return false;
+
+    }
+
+    public void writeToXML() {
+
+    }
+
+    public void writeToJSON(FileWriter fw, int cons) throws IOException {
+        if(cons != 0){
+            fw.write(",\n");
+        }
+        fw.write("\"output" + cons + "\":\n{\n");
+        fw.write("\"name\":\"" + name + "\",\n");
+        fw.write("\"shortTitle\":\"" + shortTitle + "\",\n");
+        fw.write("\"dateUpdate\":\"" + dateUpdate + "\",\n");
+        fw.write("\"address\":\"" + address + "\",\n");
+        fw.write("\"dateFoundation\":\"" + dateFoundation + "\",\n");
+        fw.write("\"countEmployees\":\"" + countEmployees + "\",\n");
+        fw.write("\"auditor\":\"" + auditor + "\",\n");
+        fw.write("\"phone\":\"" + phone + "\",\n");
+        fw.write("\"email\":\"" + email + "\",\n");
+        fw.write("\"branch\":\"" + branch + "\",\n");
+        fw.write("\"activity\":\"" + activity + "\",\n");
+        fw.write("\"link\":\"" + link + "\"\n");
+        fw.write("}");
 
     }
 
