@@ -1,0 +1,2 @@
+name;shortTitle;dateUpdate;address;dateFoundation;countEmployees;auditor;phone;email;branch;activity;link
+name;;dateUpdate;;dateFoundation;;auditor;;email;;activity;link
