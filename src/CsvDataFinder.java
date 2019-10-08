@@ -37,7 +37,9 @@ public class CsvDataFinder {
         String reqText;
 
         FileWriter fwJSON = new FileWriter("output.json");
+        FileWriter fwXML = new FileWriter("output.xml");
         fwJSON.write("{\n");
+        fwXML.write("<output>\n");
 
         switch (req) {
             case 0:
@@ -50,6 +52,7 @@ public class CsvDataFinder {
                 for (Company elem : data) {
                     if (elem.getShortTitle().toLowerCase().equals(toFind.toLowerCase())) {
                         elem.writeToJSON(fwJSON,found);
+                        elem.writeToXML(fwXML);
                         found++;
                     }
                 }
@@ -62,6 +65,7 @@ public class CsvDataFinder {
                 for (Company elem : data) {
                     if (elem.getBranch().toLowerCase().equals(toFind.toLowerCase())) {
                         elem.writeToJSON(fwJSON,found);
+                        elem.writeToXML(fwXML);
                         found++;
                     }
                 }
@@ -73,6 +77,7 @@ public class CsvDataFinder {
                 for (Company elem : data) {
                     if (elem.getActivity().toLowerCase().equals(toFind.toLowerCase())) {
                         elem.writeToJSON(fwJSON,found);
+                        elem.writeToXML(fwXML);
                         found++;
                     }
                 }
@@ -85,6 +90,7 @@ public class CsvDataFinder {
                 for (Company elem : data) {
                     if (elem.compareDates(from.toLowerCase(), to.toLowerCase())) {
                         elem.writeToJSON(fwJSON,found);
+                        elem.writeToXML(fwXML);
                         found++;
                     }
                 }
@@ -97,6 +103,7 @@ public class CsvDataFinder {
                 for (Company elem : data) {
                     if (elem.compareEmpl(from.toLowerCase(), to.toLowerCase())) {
                         elem.writeToJSON(fwJSON, found);
+                        elem.writeToXML(fwXML);
                         found++;
                     }
                 }
@@ -110,7 +117,9 @@ public class CsvDataFinder {
         fw.write("Request: " + reqText + "\nNumber of found: " + found + "\n\n");
         fw.close();
         fwJSON.write("}\n");
+        fwXML.write("</output>");
         fwJSON.close();
+        fwXML.close();
 
     }
 

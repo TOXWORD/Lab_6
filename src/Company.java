@@ -130,7 +130,22 @@ public class Company {
 
     }
 
-    public void writeToXML() {
+    public void writeToXML(FileWriter fw) throws IOException {
+
+        fw.write("<company>\n");
+        fw.write("<name>" + name + "</name>\n");
+        fw.write("<shortTitle>" + shortTitle + "</shortTitle>\n");
+        fw.write("<dateUpdate>" + dateUpdate + "</dateUpdate>\n");
+        fw.write("<address>" + address + "</address>\n");
+        fw.write("<dateFoundation>" + dateFoundation + "</dateFoundation>\n");
+        fw.write("<countEmployees>" + countEmployees + "</countEmployees>\n");
+        fw.write("<auditor>" + auditor + "</auditor>\n");
+        fw.write("<phone>" + phone + "</phone>\n");
+        fw.write("<email>" + email + "</email>\n");
+        fw.write("<branch>" + branch + "</branch>\n");
+        fw.write("<activity>" + activity + "</activity>\n");
+        fw.write("<link>" + link + "</link>\n");
+        fw.write("</company>\n");
 
     }
 
@@ -138,7 +153,7 @@ public class Company {
         if(cons != 0){
             fw.write(",\n");
         }
-        fw.write("\"output" + cons + "\":\n{\n");
+        fw.write("\"company_" + cons + "\":\n{\n");
         fw.write("\"name\":\"" + name + "\",\n");
         fw.write("\"shortTitle\":\"" + shortTitle + "\",\n");
         fw.write("\"dateUpdate\":\"" + dateUpdate + "\",\n");
