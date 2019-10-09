@@ -7,7 +7,6 @@ import java.util.*;
 public class CsvDataFinder {
 
     private String pathIn = "input.csv";
-    private final int ELEMENTS_NUMBER = 12;
 
     private List<Company> data;
 
