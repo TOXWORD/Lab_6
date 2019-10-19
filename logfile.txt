@@ -1,0 +1,8 @@
+окт. 19, 2019 10:38:17 AM CsvDataFinder getByRequest
+FINE: Request: 2.Company by branch
+Number of found: 2
+
+окт. 19, 2019 10:38:43 AM CsvDataFinder getByRequest
+FINE: Request: 3.Company by activity
+Number of found: 1
+
