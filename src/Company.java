@@ -1,5 +1,10 @@
+import org.json.JSONObject;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Company {
 
@@ -47,6 +52,7 @@ public class Company {
             }
             dataEl = tmp;
         }
+
         name = dataEl[0];
         shortTitle = dataEl[1];
         dateUpdate = dataEl[2];
@@ -62,11 +68,6 @@ public class Company {
 
     }
 
-
-    public String getName() {
-        return name;
-    }
-
     public String getShortTitle() {
         return shortTitle;
     }
@@ -80,39 +81,22 @@ public class Company {
     }
 
 
-    public boolean compareDates(String from, String to) {
-        String[] divDate = dateFoundation.split("[.,; ]+");
-        String[] divFrom = from.split("[.,; ]+");
-        String[] divTo = to.split("[.,; ]+");
+    public boolean compareDates(String from, String to) throws ParseException {
 
-        if (divDate.length != divFrom.length || divDate.length != divTo.length) {
-            return false;
-        }
+        DateFormat formatter = new SimpleDateFormat("dd-mm-yyyy");
 
-        int yearFrom = Integer.parseInt(divFrom[divFrom.length - 1]);
-        int yearTo = Integer.parseInt(divTo[divTo.length - 1]);
-        int year = Integer.parseInt(divDate[divDate.length - 1]);
+        Date dateFr = formatter.parse(from);
+        Date dateTo = formatter.parse(to);
+        Date curDate = formatter.parse(dateFoundation);
 
-        int monthFrom = Integer.parseInt(divFrom[divFrom.length - 2]);
-        int monthTo = Integer.parseInt(divTo[divTo.length - 2]);
-        int month = Integer.parseInt(divDate[divDate.length - 2]);
-
-        int dayFrom = Integer.parseInt(divFrom[divFrom.length - 2]);
-        int dayTo = Integer.parseInt(divTo[divTo.length - 2]);
-        int day = Integer.parseInt(divDate[divDate.length - 2]);
-
-        if ((year >= yearFrom && year <= yearTo) || (year <= yearFrom && year >= yearTo)) {
-            return true;
-        } else if ((month >= monthFrom && month <= monthTo) || (month <= monthFrom && month >= monthTo)) {
-            return true;
-        } else if ((day >= dayFrom && day <= dayTo) || (day <= dayFrom && day >= dayTo)) {
+        if(curDate.before(dateTo) && curDate.after(dateFr)){
             return true;
         }
-
         return false;
+
     }
 
-    public boolean compareEmpl(String from, String to) {
+    public boolean compareEmpl(String from, String to) throws NumberFormatException{
         int fr = Integer.parseInt(from);
         int t = Integer.parseInt(to);
         int employees = Integer.parseInt(countEmployees);
@@ -122,11 +106,7 @@ public class Company {
             t = fr;
             fr = tmp;
         }
-
-        if (employees >= fr && employees <= t) {
-            return true;
-        }
-        return false;
+        return employees >= fr && employees <= t;
 
     }
 
@@ -149,25 +129,21 @@ public class Company {
 
     }
 
-    public void writeToJSON(FileWriter fw, int cons) throws IOException {
-        if(cons != 0){
-            fw.write(",\n");
-        }
-        fw.write("\"company_" + cons + "\":\n{\n");
-        fw.write("\"name\":\"" + name + "\",\n");
-        fw.write("\"shortTitle\":\"" + shortTitle + "\",\n");
-        fw.write("\"dateUpdate\":\"" + dateUpdate + "\",\n");
-        fw.write("\"address\":\"" + address + "\",\n");
-        fw.write("\"dateFoundation\":\"" + dateFoundation + "\",\n");
-        fw.write("\"countEmployees\":\"" + countEmployees + "\",\n");
-        fw.write("\"auditor\":\"" + auditor + "\",\n");
-        fw.write("\"phone\":\"" + phone + "\",\n");
-        fw.write("\"email\":\"" + email + "\",\n");
-        fw.write("\"branch\":\"" + branch + "\",\n");
-        fw.write("\"activity\":\"" + activity + "\",\n");
-        fw.write("\"link\":\"" + link + "\"\n");
-        fw.write("}");
-
+    public JSONObject addToJSON(){
+        JSONObject companyAsJS = new JSONObject();
+        companyAsJS.put("name", name);
+        companyAsJS.put("shortTitle", shortTitle);
+        companyAsJS.put("dateUpdate", dateUpdate);
+        companyAsJS.put("address", address);
+        companyAsJS.put("dateFoundation", dateFoundation);
+        companyAsJS.put("countEmployees", countEmployees);
+        companyAsJS.put("auditor", auditor);
+        companyAsJS.put("phone", phone);
+        companyAsJS.put("email", email);
+        companyAsJS.put("branch", branch);
+        companyAsJS.put("activity", activity);
+        companyAsJS.put("link", link);
+        return companyAsJS;
     }
 
 }

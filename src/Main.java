@@ -1,26 +1,21 @@
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Date;
+import java.util.logging.*;
 
 public class Main {
+
+    private static final Logger logger = Logger.getLogger("log");
+
     public static void main(String[] args) throws IOException {
+
+        LogManager.getLogManager().readConfiguration(new FileInputStream("logging.properties"));
+
         try {
-
-            Date d = new Date();
-            FileWriter fw = new FileWriter("logfile.txt", true);
-            fw.write(d.toString() + "\n");
-            fw.close();
-
             CsvDataFinder cdf = new CsvDataFinder();
-            cdf.print();
-            cdf.getByRequest();
+            cdf.fillFileByRequest();
         }
         catch (Exception e) {
-            FileWriter fw = new FileWriter("logfile.txt", true);
-            fw.write("Input error!!!" + "\n\n");
-            fw.close();
-            System.out.println("Incorrect input!!!");
+                logger.info(e.getMessage() + "\n");
         }
 
     }
