@@ -1,8 +1,9 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.text.ParseException;
 import java.util.*;
+import java.util.logging.*;
+
+import org.json.JSONObject;
 
 public class CsvDataFinder {
 
@@ -10,120 +11,126 @@ public class CsvDataFinder {
 
     private List<Company> data;
 
-    public CsvDataFinder() throws FileNotFoundException {
+    private static final Logger logger = Logger.getLogger("log");
+
+    public CsvDataFinder() throws IOException {
 
         data = new ArrayList<>();
 
         File inp = new File(pathIn);
-        Scanner sc = new Scanner(inp);
-
-        while (sc.hasNextLine()) {
-            Company temp = new Company(sc.nextLine());
-            data.add(temp);
+        try (Scanner sc = new Scanner(inp)) {
+            while (sc.hasNextLine()) {
+                data.add(new Company(sc.nextLine()));
+            }
         }
     }
 
-    public void getByRequest() throws IOException {
+    public void fillFileByRequest() throws IOException, ParseException {
 
-        Scanner sc = new Scanner(System.in);
+        try (Scanner sc = new Scanner(System.in)) {
 
-        System.out.println("Enter a number of the request: ");
-        int req = Integer.parseInt(sc.next());
-        int found = 0;
-        String toFind;
-        String from;
-        String to;
-        String reqText;
+            System.out.println("Enter a number of the request: ");
+            int req = Integer.parseInt(sc.next());
+            int found = 0;
+            String toFind = null;
+            String from = null;
+            String to = null;
+            String reqText;
 
-        FileWriter fwJSON = new FileWriter("output.json");
-        FileWriter fwXML = new FileWriter("output.xml");
-        fwJSON.write("{\n");
-        fwXML.write("<output>\n");
+            JSONObject jsData = new JSONObject();
 
-        switch (req) {
-            case 0:
-                return;
+            try (FileWriter fwJSON = new FileWriter("output.json")) {
+                try (FileWriter fwXML = new FileWriter("output.xml")) {
+                    fwXML.write("<output>\n");
 
-            case 1: {
-                reqText = "1.Company by short title";
-                System.out.println(reqText + "\n Enter the title: ");
-                toFind = sc.next();
-                for (Company elem : data) {
-                    if (elem.getShortTitle().toLowerCase().equals(toFind.toLowerCase())) {
-                        elem.writeToJSON(fwJSON,found);
-                        elem.writeToXML(fwXML);
-                        found++;
+                    switch (req) {
+                        case 0:
+                            return;
+
+                        case 1: {
+                            reqText = "1.Company by short title";
+                            System.out.println(reqText + "\n Enter the title: ");
+                            toFind = sc.next();
+                            for (Company elem : data) {
+                                if (elem.getShortTitle().toLowerCase().equals(toFind.toLowerCase())) {
+                                    jsData.put("company_" + found, elem.addToJSON());
+                                    elem.writeToXML(fwXML);
+                                    found++;
+                                }
+                            }
+                        }
+                        break;
+                        case 2:
+                            reqText = "2.Company by branch";
+                            System.out.println(reqText + "\n Enter the branch: ");
+                            toFind = sc.next();
+                            for (Company elem : data) {
+                                if (elem.getBranch().toLowerCase().equals(toFind.toLowerCase())) {
+                                    jsData.put("company_" + found, elem.addToJSON());
+                                    elem.writeToXML(fwXML);
+                                    found++;
+                                }
+                            }
+                            break;
+                        case 3:
+                            reqText = "3.Company by activity";
+                            System.out.println(reqText + "\n Enter the activity: ");
+                            toFind = sc.next();
+                            for (Company elem : data) {
+                                if (elem.getActivity().toLowerCase().equals(toFind.toLowerCase())) {
+                                    jsData.put("company_" + found, elem.addToJSON());
+                                    elem.writeToXML(fwXML);
+                                    found++;
+                                }
+                            }
+                            break;
+                        case 4:
+                            reqText = "4.Company by foundation date";
+                            System.out.println(reqText + "\n Enter the period(from/to): ");
+                            from = sc.next();
+                            to = sc.next();
+                            for (Company elem : data) {
+                                if (elem.compareDates(from.toLowerCase(), to.toLowerCase())) {
+                                    jsData.put("company_" + found, elem.addToJSON());
+                                    elem.writeToXML(fwXML);
+                                    found++;
+                                }
+                            }
+                            break;
+                        case 5:
+                            reqText = "5.Company by employees number";
+                            System.out.println(reqText + "\n Enter the period(from/to) form - dd-mm-yyyy: ");
+                            from = sc.next();
+                            to = sc.next();
+                            for (Company elem : data) {
+                                if (elem.compareEmpl(from.toLowerCase(), to.toLowerCase())) {
+                                    jsData.put("company_" + found, elem.addToJSON());
+                                    elem.writeToXML(fwXML);
+                                    found++;
+                                }
+                            }
+                            break;
+                        default:
+                            reqText = "Incorrect request";
+                            break;
                     }
+
+
+                    fwJSON.write(jsData.toString());
+
+                    if (toFind != null) {
+                        logger.info("Request: " + reqText + " : " + toFind + " Number of found: " + found + "\n");
+                    } else if (from != null && to != null) {
+                        logger.info("Request: " + reqText + " : " + from + " / " + to + " Number of found: " + found + "\n");
+                    } else {
+                        logger.info(reqText);
+                    }
+
+                    fwXML.write("</output>");
                 }
             }
-            break;
-            case 2:
-                reqText = "2.Company by branch";
-                System.out.println(reqText + "\n Enter the branch: ");
-                toFind = sc.next();
-                for (Company elem : data) {
-                    if (elem.getBranch().toLowerCase().equals(toFind.toLowerCase())) {
-                        elem.writeToJSON(fwJSON,found);
-                        elem.writeToXML(fwXML);
-                        found++;
-                    }
-                }
-                break;
-            case 3:
-                reqText = "3.Company by activity";
-                System.out.println(reqText + "\n Enter the activity: ");
-                toFind = sc.next();
-                for (Company elem : data) {
-                    if (elem.getActivity().toLowerCase().equals(toFind.toLowerCase())) {
-                        elem.writeToJSON(fwJSON,found);
-                        elem.writeToXML(fwXML);
-                        found++;
-                    }
-                }
-                break;
-            case 4:
-                reqText = "4.Company by foundation date";
-                System.out.println(reqText + "\n Enter the period(from/to): ");
-                from = sc.next();
-                to = sc.next();
-                for (Company elem : data) {
-                    if (elem.compareDates(from.toLowerCase(), to.toLowerCase())) {
-                        elem.writeToJSON(fwJSON,found);
-                        elem.writeToXML(fwXML);
-                        found++;
-                    }
-                }
-                break;
-            case 5:
-                reqText = "5.Company by employees number";
-                System.out.println(reqText + "\n Enter the period(from/to): ");
-                from = sc.next();
-                to = sc.next();
-                for (Company elem : data) {
-                    if (elem.compareEmpl(from.toLowerCase(), to.toLowerCase())) {
-                        elem.writeToJSON(fwJSON, found);
-                        elem.writeToXML(fwXML);
-                        found++;
-                    }
-                }
-                break;
-            default:
-                reqText = "Incorrect request";
-                System.out.println(reqText);
-                break;
         }
-        FileWriter fw = new FileWriter("logfile.txt", true);
-        fw.write("Request: " + reqText + "\nNumber of found: " + found + "\n\n");
-        fw.close();
-        fwJSON.write("}\n");
-        fwXML.write("</output>");
-        fwJSON.close();
-        fwXML.close();
-
     }
 
-    public void print() {
-
-    }
 
 }
