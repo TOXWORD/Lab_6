@@ -1,4 +1,5 @@
 import org.json.JSONObject;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -68,20 +69,28 @@ public class Company {
 
     }
 
-    public String getShortTitle() {
-        return shortTitle;
+    public JSONObject compareShTitles(String title) {
+        if (shortTitle.compareToIgnoreCase(title) == 0) {
+            return addToJSON();
+        }
+        return new JSONObject();
     }
 
-    public String getBranch() {
-        return branch;
+    public JSONObject compareBranches(String branch) {
+        if (this.branch.compareToIgnoreCase(branch) == 0) {
+            return addToJSON();
+        }
+        return new JSONObject();
     }
 
-    public String getActivity() {
-        return activity;
+    public JSONObject compareActivities(String activity) {
+        if (this.activity.compareToIgnoreCase(activity) == 0) {
+            return addToJSON();
+        }
+        return new JSONObject();
     }
 
-
-    public boolean compareDates(String from, String to) throws ParseException {
+    public JSONObject compareDates(String from, String to) throws ParseException {
 
         DateFormat formatter = new SimpleDateFormat("dd-mm-yyyy");
 
@@ -89,14 +98,14 @@ public class Company {
         Date dateTo = formatter.parse(to);
         Date curDate = formatter.parse(dateFoundation);
 
-        if(curDate.before(dateTo) && curDate.after(dateFr)){
-            return true;
+        if ((curDate.before(dateTo) || curDate.toString().equals(dateTo.toString())) && (curDate.after(dateFr) || curDate.toString().equals(dateFr.toString()))) {
+            return addToJSON();
         }
-        return false;
+        return new JSONObject();
 
     }
 
-    public boolean compareEmpl(String from, String to) throws NumberFormatException{
+    public JSONObject compareEmpl(String from, String to) throws NumberFormatException {
         int fr = Integer.parseInt(from);
         int t = Integer.parseInt(to);
         int employees = Integer.parseInt(countEmployees);
@@ -106,8 +115,10 @@ public class Company {
             t = fr;
             fr = tmp;
         }
-        return employees >= fr && employees <= t;
-
+        if (employees >= fr && employees <= t) {
+            return addToJSON();
+        }
+        return new JSONObject();
     }
 
     public void writeToXML(FileWriter fw) throws IOException {
@@ -129,7 +140,7 @@ public class Company {
 
     }
 
-    public JSONObject addToJSON(){
+    public JSONObject addToJSON() {
         JSONObject companyAsJS = new JSONObject();
         companyAsJS.put("name", name);
         companyAsJS.put("shortTitle", shortTitle);

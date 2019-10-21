@@ -26,7 +26,6 @@ public class CsvDataFinder {
     }
 
     public void fillFileByRequest() throws IOException, ParseException {
-
         try (Scanner sc = new Scanner(System.in)) {
 
             System.out.println("Enter a number of the request: ");
@@ -46,76 +45,67 @@ public class CsvDataFinder {
                     switch (req) {
                         case 0:
                             return;
-
-                        case 1: {
+                        case 1:
                             reqText = "1.Company by short title";
                             System.out.println(reqText + "\n Enter the title: ");
                             toFind = sc.next();
-                            for (Company elem : data) {
-                                if (elem.getShortTitle().toLowerCase().equals(toFind.toLowerCase())) {
-                                    jsData.put("company_" + found, elem.addToJSON());
-                                    elem.writeToXML(fwXML);
-                                    found++;
-                                }
-                            }
-                        }
-                        break;
+                            break;
                         case 2:
                             reqText = "2.Company by branch";
                             System.out.println(reqText + "\n Enter the branch: ");
                             toFind = sc.next();
-                            for (Company elem : data) {
-                                if (elem.getBranch().toLowerCase().equals(toFind.toLowerCase())) {
-                                    jsData.put("company_" + found, elem.addToJSON());
-                                    elem.writeToXML(fwXML);
-                                    found++;
-                                }
-                            }
                             break;
                         case 3:
                             reqText = "3.Company by activity";
                             System.out.println(reqText + "\n Enter the activity: ");
                             toFind = sc.next();
-                            for (Company elem : data) {
-                                if (elem.getActivity().toLowerCase().equals(toFind.toLowerCase())) {
-                                    jsData.put("company_" + found, elem.addToJSON());
-                                    elem.writeToXML(fwXML);
-                                    found++;
-                                }
-                            }
                             break;
                         case 4:
                             reqText = "4.Company by foundation date";
                             System.out.println(reqText + "\n Enter the period(from/to): ");
                             from = sc.next();
                             to = sc.next();
-                            for (Company elem : data) {
-                                if (elem.compareDates(from.toLowerCase(), to.toLowerCase())) {
-                                    jsData.put("company_" + found, elem.addToJSON());
-                                    elem.writeToXML(fwXML);
-                                    found++;
-                                }
-                            }
                             break;
                         case 5:
                             reqText = "5.Company by employees number";
-                            System.out.println(reqText + "\n Enter the period(from/to) form - dd-mm-yyyy: ");
+                            System.out.println(reqText + "\n Enter the period(from/to): ");
                             from = sc.next();
                             to = sc.next();
-                            for (Company elem : data) {
-                                if (elem.compareEmpl(from.toLowerCase(), to.toLowerCase())) {
-                                    jsData.put("company_" + found, elem.addToJSON());
-                                    elem.writeToXML(fwXML);
-                                    found++;
-                                }
-                            }
                             break;
                         default:
                             reqText = "Incorrect request";
                             break;
                     }
 
+                    JSONObject toPut;
 
+                    for (Company elem : data) {
+
+                        switch (req) {
+                            case 1:
+                                toPut = elem.compareShTitles(toFind);
+                                break;
+                            case 2:
+                                toPut = elem.compareBranches(toFind);
+                                break;
+                            case 3:
+                                toPut = elem.compareActivities(toFind);
+                                break;
+                            case 4:
+                                toPut = elem.compareDates(from, to);
+                                break;
+                            case 5:
+                                toPut = elem.compareEmpl(from, to);
+                                break;
+                            default:
+                                throw new IllegalStateException("Unexpected value: " + req);
+                        }
+                        if (!toPut.isEmpty()) {
+                            jsData.put("company_" + found, toPut);
+                            elem.writeToXML(fwXML);
+                            found++;
+                        }
+                    }
                     fwJSON.write(jsData.toString());
 
                     if (toFind != null) {
@@ -131,6 +121,4 @@ public class CsvDataFinder {
             }
         }
     }
-
-
 }
