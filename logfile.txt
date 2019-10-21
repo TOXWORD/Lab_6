@@ -1,0 +1,33 @@
+окт. 21, 2019 11:51:30 AM CsvDataFinder fillFileByRequest
+INFO: Request: 1.Company by short title : title Number of found: 2
+
+окт. 21, 2019 11:54:11 AM CsvDataFinder fillFileByRequest
+INFO: Request: 4.Company by foundation date : 00-00-0000 / 13-08-2020 Number of found: 1
+
+окт. 21, 2019 11:55:37 AM CsvDataFinder fillFileByRequest
+INFO: Request: 4.Company by foundation date : 00-00-0000 / 12-08-2020 Number of found: 1
+
+окт. 21, 2019 11:57:41 AM CsvDataFinder fillFileByRequest
+INFO: Request: 4.Company by foundation date : 00-00-0000 / 12-08-2020 Number of found: 2
+
+окт. 21, 2019 12:07:34 PM CsvDataFinder fillFileByRequest
+INFO: Request: 1.Company by short title : title Number of found: 2
+
+окт. 21, 2019 12:08:06 PM CsvDataFinder fillFileByRequest
+INFO: Request: 1.Company by short title : fsdfsdf Number of found: 0
+
+окт. 21, 2019 12:12:19 PM CsvDataFinder fillFileByRequest
+INFO: Request: 2.Company by branch : branch Number of found: 2
+
+окт. 21, 2019 12:12:43 PM CsvDataFinder fillFileByRequest
+INFO: Request: 3.Company by activity : activity Number of found: 1
+
+окт. 21, 2019 12:35:53 PM CsvDataFinder fillFileByRequest
+INFO: Request: 1.Company by short title : titile Number of found: 0
+
+окт. 21, 2019 12:36:14 PM CsvDataFinder fillFileByRequest
+INFO: Request: 1.Company by short title : title Number of found: 2
+
+окт. 21, 2019 12:36:29 PM CsvDataFinder fillFileByRequest
+INFO: Request: 5.Company by employees number : 500 / 0 Number of found: 2
+
